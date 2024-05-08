@@ -25,6 +25,8 @@ export class Agent {
     portrait;
     icon;
     #nodo;
+    #deleteNode;
+    #deleteButton;
 
     constructor(id, name, description, roleDescription, portrait, icon) {
         this.id = id;
@@ -55,21 +57,33 @@ export class Agent {
         description.classList.add('info-container__agent-info');
         description.textContent = this.description;
 
+        const actions = document.createElement('div');
+        actions.classList.add('info-container__actions');
+
         const infoButton = document.createElement('div');
         infoButton.classList.add('info-container__more-info');
         const infoButtonText = document.createElement('p');
-        infoButtonText.textContent = 'Ver información detallada';
+        infoButtonText.textContent = 'View more information';
+        infoButton.appendChild(infoButtonText);
+
+        const deleteButton = document.createElement('i');
+        deleteButton.classList.add("info-container__delete-button");
+        deleteButton.classList.add("fa-solid", "fa-trash");
+        this.#deleteButton = deleteButton;
+
+        actions.appendChild(infoButton);
+        actions.appendChild(deleteButton);
 
         this.#nodo = infoButton;
-
-        infoButton.appendChild(infoButtonText);
         
         agentInfo.appendChild(agentName);
         agentInfo.appendChild(description);
-        agentInfo.appendChild(infoButton);
+        agentInfo.appendChild(actions);
         
         agentCard.appendChild(agentIcon);
         agentCard.appendChild(agentInfo);
+
+        this.#deleteNode = agentCard;
 
         return agentCard;
     }
@@ -115,6 +129,11 @@ export class Agent {
     addEventListeners() {
         this.#nodo.addEventListener('click', () => {
             window.location.href = `./agent-info.html?id=${this.id}`;
+        });
+
+        this.#deleteButton.addEventListener('click', (event) => {
+            console.log(this);
+            this.#deleteNode.outerHTML = '';
         });
     }
 }
